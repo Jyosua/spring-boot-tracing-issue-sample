@@ -45,7 +45,10 @@ Or use environment variable:
 JWT_ISSUER_URI=https://your-auth-server.com ./gradlew bootRun
 ```
 
-For development/testing without a real OAuth2 provider, the application includes a fallback HMAC-based JWT decoder. You can set a custom secret via the `JWT_SECRET` environment variable.
+For development/testing without a real OAuth2 provider, you must set the `JWT_SECRET` environment variable:
+```bash
+JWT_SECRET=your-development-secret-at-least-256-bits ./gradlew bootRun
+```
 
 ## Build and Run
 

@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.web.SecurityFilterChain
+import java.nio.charset.StandardCharsets
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
@@ -40,10 +41,12 @@ class SecurityConfig {
         } else {
             // WARNING: This is for development/testing only
             // In production, configure spring.security.oauth2.resourceserver.jwt.issuer-uri
-            // or set JWT_SECRET environment variable with a secure random key
             val secret = System.getenv("JWT_SECRET") 
-                ?: "default-secret-key-for-development-must-be-at-least-256-bits-long"
-            val secretKey: SecretKey = SecretKeySpec(secret.toByteArray(), "HmacSHA256")
+                ?: throw IllegalStateException(
+                    "JWT configuration required: Set either 'spring.security.oauth2.resourceserver.jwt.issuer-uri' " +
+                    "property or 'JWT_SECRET' environment variable for development"
+                )
+            val secretKey: SecretKey = SecretKeySpec(secret.toByteArray(StandardCharsets.UTF_8), "HmacSHA256")
             NimbusJwtDecoder.withSecretKey(secretKey).build()
         }
     }
