@@ -22,13 +22,12 @@ class SecurityConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .authorizeHttpRequests { auth ->
-                auth
-                    .requestMatchers("/health").permitAll()
-                    .anyRequest().authenticated()
+            .authorizeHttpRequests {
+                it.requestMatchers("/health").permitAll()
+                it.anyRequest().authenticated()
             }
-            .oauth2ResourceServer { oauth2 ->
-                oauth2.jwt { }
+            .oauth2ResourceServer {
+                it.jwt { }
             }
         
         return http.build()
