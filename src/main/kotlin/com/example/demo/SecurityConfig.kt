@@ -44,16 +44,20 @@ class SecurityConfig {
 
     @Bean
     fun jwtDecoder(): JwtDecoder {
+        return ErrorThrowingDecoder()
+    }
+
+    /*fun defaultDecoder(): JwtDecoder {
         return if (!issuerUri.isNullOrEmpty()) {
             NimbusJwtDecoder.withIssuerLocation(issuerUri).build()
         } else {
-            val secret = System.getenv("JWT_SECRET") 
+            val secret = System.getenv("JWT_SECRET")
                 ?: throw IllegalStateException(
                     "JWT configuration required: Set either 'spring.security.oauth2.resourceserver.jwt.issuer-uri' " +
-                    "property or 'JWT_SECRET' environment variable for development"
+                            "property or 'JWT_SECRET' environment variable for development"
                 )
             val secretKey: SecretKey = SecretKeySpec(secret.toByteArray(StandardCharsets.UTF_8), "HmacSHA256")
             NimbusJwtDecoder.withSecretKey(secretKey).build()
         }
-    }
+    }*/
 }
