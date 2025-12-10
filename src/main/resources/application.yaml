@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: spring-boot-tracing-issue-sample
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:}
+
+server:
+  port: 8080
