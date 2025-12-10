@@ -47,8 +47,6 @@ class SecurityConfig {
         return if (!issuerUri.isNullOrEmpty()) {
             NimbusJwtDecoder.withIssuerLocation(issuerUri).build()
         } else {
-            // WARNING: This is for development/testing only
-            // In production, configure spring.security.oauth2.resourceserver.jwt.issuer-uri
             val secret = System.getenv("JWT_SECRET") 
                 ?: throw IllegalStateException(
                     "JWT configuration required: Set either 'spring.security.oauth2.resourceserver.jwt.issuer-uri' " +
