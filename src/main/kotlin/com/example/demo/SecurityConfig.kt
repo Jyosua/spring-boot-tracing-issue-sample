@@ -16,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec
 class SecurityConfig {
 
     @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri:}")
-    private val issuerUri: String = ""
+    private val issuerUri: String? = null
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -35,11 +35,14 @@ class SecurityConfig {
 
     @Bean
     fun jwtDecoder(): JwtDecoder {
-        return if (issuerUri.isNotEmpty()) {
+        return if (!issuerUri.isNullOrEmpty()) {
             NimbusJwtDecoder.withIssuerLocation(issuerUri).build()
         } else {
-            // Default decoder for development/testing - uses HMAC SHA-256
-            val secret = "default-secret-key-for-development-must-be-at-least-256-bits-long"
+            // WARNING: This is for development/testing only
+            // In production, configure spring.security.oauth2.resourceserver.jwt.issuer-uri
+            // or set JWT_SECRET environment variable with a secure random key
+            val secret = System.getenv("JWT_SECRET") 
+                ?: "default-secret-key-for-development-must-be-at-least-256-bits-long"
             val secretKey: SecretKey = SecretKeySpec(secret.toByteArray(), "HmacSHA256")
             NimbusJwtDecoder.withSecretKey(secretKey).build()
         }
