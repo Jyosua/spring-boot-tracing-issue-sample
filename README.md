@@ -35,9 +35,14 @@ The application is secured with Spring Security and configured as an OAuth2 Reso
 - Returns HTTP 401 with `WWW-Authenticate: Bearer` header for unauthenticated requests
 
 #### JWT Configuration
-Configure the JWT issuer URI in `application.properties` or via environment variable:
-```properties
-spring.security.oauth2.resourceserver.jwt.issuer-uri=https://your-auth-server.com
+Configure the JWT issuer URI in `application.yaml` or via environment variable:
+```yaml
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://your-auth-server.com
 ```
 
 Or use environment variable:
