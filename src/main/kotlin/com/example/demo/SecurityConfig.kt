@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.invoke
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.web.SecurityFilterChain
@@ -21,14 +23,21 @@ class SecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http
-            .authorizeHttpRequests {
-                it.requestMatchers("/health").permitAll()
-                it.anyRequest().authenticated()
+        http {
+            authorizeHttpRequests {
+                authorize("/health", permitAll)
+                authorize(anyRequest, authenticated)
             }
-            .oauth2ResourceServer {
-                it.jwt { }
+            oauth2ResourceServer {
+                jwt { }
             }
+            csrf {
+                disable()
+            }
+            sessionManagement {
+                sessionCreationPolicy = SessionCreationPolicy.STATELESS
+            }
+        }
         
         return http.build()
     }
